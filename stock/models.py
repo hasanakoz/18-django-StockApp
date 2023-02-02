@@ -40,7 +40,7 @@ class Product(UpdateCreate):
         return self.name
 
 
-class Firm(models.Model):
+class Firm(UpdateCreate):
     name = models.CharField(max_length=25, unique=True)
     phone = models.CharField(max_length=25)
     address = models.CharField(max_length=200, unique=True)
@@ -54,7 +54,7 @@ class Purchase(UpdateCreate):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     firm = models.ForeignKey(Firm, on_delete=models.SET_NULL, null=True, related_name='puchases')
     brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, null=True, related_name='b_puchases')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, related_name='puchase')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, related_name='purchase')
     quantity = models.SmallIntegerField()
     price = models.DecimalField(max_digits=6, decimal_places=2 )
     price_total = models.DecimalField(max_digits=6, decimal_places=2, blank=True )
