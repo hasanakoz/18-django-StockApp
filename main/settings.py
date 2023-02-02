@@ -42,12 +42,14 @@ INSTALLED_APPS = [
     
     # my_apps
     'account',
+    'stock',
     
     # drf
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
     'drf_yasg',
+    
     
 ]
 
