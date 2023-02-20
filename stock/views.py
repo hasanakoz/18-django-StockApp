@@ -82,6 +82,14 @@ class PurchaseView(viewsets.ModelViewSet):
         product.stock += res
         product.save()
 
+        self.perform_update(serializer)
+
+        if getattr(instance, "_prefetched_objects_cache", None):
+            # If ‘prefetch_related’ has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+        return Response(serializer.data)
+
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         product = Product.objects.get(id=instance.product_id)
@@ -89,17 +97,6 @@ class PurchaseView(viewsets.ModelViewSet):
         product.save()
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-
-        #! #############################################
-        self.perform_update(serializer)
-        if getattr(instance, "_prefetched_objects_cache", None):
-            # If ‘prefetch_related’ has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            instance._prefetched_objects_cache = {}
-        return Response(serializer.data)
-
 
 
 class SalesView(viewsets.ModelViewSet):
@@ -141,7 +138,7 @@ class SalesView(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
 
         sale = request.data
-        product = Product.objects.get(id=sale['product_id'])
+        product = Product.objects.get(id=instance.product_id)
 
         if sale["quantity"] > instance.quantity:
 
@@ -168,10 +165,13 @@ class SalesView(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
-    def perform_update(self, serializer):
-        serializer.save()
-
-    def partial_update(self, request, *args, **kwargs):
-        kwargs['partial'] = True
-        return self.update(request, *args, **kwargs)
-
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        
+        #!####### DELETE Product Stock ########
+        product = Product.objects.get(id=instance.product_id)
+        product.stock += instance.quantity
+        product.save()
+        
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
