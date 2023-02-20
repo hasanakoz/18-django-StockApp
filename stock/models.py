@@ -60,7 +60,7 @@ class Purchase(UpdateCreate):
     price_total = models.DecimalField(max_digits=6, decimal_places=2, blank=True )
 
     def __str__(self):
-        return {self.product}-{self.quantity}
+        return f'{self.product}-{self.quantity}'
 
 
 class Sales(UpdateCreate):
@@ -72,6 +72,6 @@ class Sales(UpdateCreate):
     price_total = models.DecimalField(max_digits=6, decimal_places=2, blank=True )
 
     def __str__(self):
-        return {self.product}-{self.quantity}
+        return f'{self.product}-{self.quantity}'
 
 
