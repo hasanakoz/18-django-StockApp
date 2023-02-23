@@ -69,3 +69,5 @@ class CustomTokenSerializer(TokenSerializer):
 
     class Meta(TokenSerializer.Meta):
         fields = ('key', 'user')
+
+

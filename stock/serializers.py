@@ -81,7 +81,7 @@ class PurchaseSerializer(serializers.ModelSerializer):
     time_hour = serializers.SerializerMethodField()
     createds = serializers.SerializerMethodField()
     class Meta:
-        model = Purchase,
+        model = Purchase
         fields = (
             "id",
             "user",
