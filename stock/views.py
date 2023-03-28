@@ -126,10 +126,11 @@ class SalesView(viewsets.ModelViewSet):
 
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
         serializer.save(user = self.request.user)
+
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
@@ -152,7 +153,7 @@ class SalesView(viewsets.ModelViewSet):
             }
             return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
 
-        elif instance.quantity <= sale["quantity"]:
+        elif instance.quantity >= sale["quantity"]:
             product.stock += instance.quantity - sale["quantity"]
             product.save()
 
